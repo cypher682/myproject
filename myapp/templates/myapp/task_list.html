@@ -1,0 +1,31 @@
+{% extends 'myapp/base.html' %}
+     {% block content %}
+     <div class="mb-4">
+         <a href="{% url 'task_create' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Task</a>
+     </div>
+     <ul class="space-y-4">
+         {% for task in tasks %}
+         <li class="bg-white p-4 rounded shadow flex justify-between items-center">
+             <div>
+                 <h2 class="{% if task.completed %}line-through text-gray-500{% else %}text-lg font-semibold{% endif %}">
+                     {{ task.title }}
+                 </h2>
+                 <p class="text-gray-600">{{ task.description }}</p>
+                 <p class="text-sm text-gray-400">Created: {{ task.created_at|date:"Y-m-d H:i" }}</p>
+             </div>
+             <div class="space-x-2">
+                 <form action="{% url 'task_toggle' task.pk %}" method="post" class="inline">
+                     {% csrf_token %}
+                     <button type="submit" class="bg-{% if task.completed %}gray-400{% else %}green-500{% endif %} text-white px-2 py-1 rounded hover:bg-{% if task.completed %}gray-500{% else %}green-600{% endif %}">
+                         {% if task.completed %}Undo{% else %}Complete{% endif %}
+                     </button>
+                 </form>
+                 <a href="{% url 'task_update' task.pk %}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</a>
+                 <a href="{% url 'task_delete' task.pk %}" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</a>
+             </div>
+         </li>
+         {% empty %}
+         <li class="text-center text-gray-600">No tasks yet.</li>
+         {% endfor %}
+     </ul>
+     {% endblock %}
