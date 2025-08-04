@@ -3,3 +3,4 @@
 # Test change thrid time
 test again
 updated ip test
+# test static files
