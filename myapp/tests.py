@@ -2,12 +2,10 @@
 
 # Create your tests here.
 from django.test import TestCase
-from django.urls import reverse
-from .models import Todo
+from .models import Task
 
-class TodoTests(TestCase):
-    def test_todo_list_page(self):
-        Todo.objects.create(task="Test Task")
-        response = self.client.get(reverse('todo_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Task")
+class TaskModelTests(TestCase):
+    def test_task_creation(self):
+        task = Task.objects.create(title="Test Task", description="Test Description")
+        self.assertEqual(task.title, "Test Task")
+        self.assertFalse(task.completed)
