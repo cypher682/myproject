@@ -28,9 +28,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Create static directory
+      - name: Install Tailwind CLI
+        run: >
+          mkdir -p myapp/static/css
+
+          wget -O myapp/static/css/tailwind.min.js
+          https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64
+
+          chmod +x myapp/static/css/tailwind.min.js
+      - name: Create Tailwind input.css
         run: |
-          mkdir -p myapp/static
+          echo "@tailwind base;" > myapp/static/css/input.css
+          echo "@tailwind components;" >> myapp/static/css/input.css
+          echo "@tailwind utilities;" >> myapp/static/css/input.css
+      - name: Compile Tailwind CSS
+        run: |
+          cd myapp/static/css
+          ./tailwind.min.js -i input.css -o tailwind.css
       - name: Apply Migrations
         run: |
           python manage.py makemigrations --check
